@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.png">
+    <title>Text to Image Encryption/Decryption</title>
+    <style>
+        /* General body and text styles */
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 2rem;
+        }
+
+        /* Container for form sections */
+        .form-section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Error messages */
+        .error {
+            color: red;
+            margin: 10px 0;
+        }
+
+        /* Textarea and input field styling */
+        textarea, input[type="text"], input[type="password"], input[type="file"] {
+            width: calc(100% - 40px); /* Keep fields inside the container, add margin */
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        /* Set textarea height for large text inputs */
+        textarea {
+            height: 250px; /* Larger height for both encryption and decryption */
+        }
+
+        /* Button styles */
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Button group for text actions */
+        .button-group {
+            margin-top: 10px;
+        }
+
+        /* Center and equalize button widths in mobile view */
+        @media (max-width: 768px) {
+            .button-group button {
+                width: 100%; /* Make buttons full width in mobile */
+                margin: 5px 0; /* Add margin between buttons */
+            }
+        }
+
+        /* Decrypted text area style (same size as the encrypt textarea) */
+        .decrypted-text {
+            font-size: 1rem;
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+            resize: none;
+            height: 250px; /* Same height as the encryption textarea */
+            width: calc(100% - 40px);
+            margin-left: 20px;
+            margin-right: 20px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                font-size: 0.9rem;
+            }
+
+            textarea, input[type="text"], input[type="password"], input[type="file"] {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            .form-section {
+                padding: 15px;
+            }
+
+            .decrypted-text {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+    </style>
+
+    <script>
+        function clearTextField(fieldId) {
+            document.getElementById(fieldId).value = '';
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Decrypted text copied to clipboard!');
+            }).catch(err => {
+                alert('Failed to copy text: ' + err);
+            });
+        }
+    </script>
+</head>
+<body>
+
+<h1>Text to Image Encryption/Decryption</h1>
+
+<!-- Form section for encrypting text to image -->
+<div class="form-section">
+    <h2>Encrypt Text to Image</h2>
+    <form action="/encrypt" method="POST">
+        <textarea id="encrypt-text" name="text" placeholder="Enter text to encrypt..." required></textarea><br>
+        <input type="password" name="key" placeholder="Enter encryption key" required><br>
+        <div class="button-group">
+            <button type="submit">Encrypt Text</button>
+            <button type="button" onclick="clearTextField('encrypt-text')">Clear Text to Encrypt</button>
+        </div>
+    </form>
+</div>
+
+<!-- Form section for decrypting image to text -->
+<div class="form-section">
+    <h2>Decrypt Image to Text</h2>
+    <form action="/decrypt" method="POST" enctype="multipart/form-data">
+        <input type="password" name="key" placeholder="Enter decryption key" required><br>
+        <input type="file" name="image" accept="image/png" required><br>
+        <div class="button-group">
+            <button type="submit">Decrypt Image</button>
+        </div>
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Decrypted text area if decrypted text is present -->
+{% if decrypted_text %}
+<div class="form-section">
+    <h2>Decrypted Text</h2>
+    <textarea id="decrypted-text" class="decrypted-text" readonly>{{ decrypted_text }}</textarea>
+    <div class="button-group">
+        <button type="button" onclick="copyToClipboard(document.getElementById('decrypted-text').value)">Copy Decrypted Text</button>
+        <button type="button" onclick="clearTextField('decrypted-text')">Clear Decrypted Text</button>
+    </div>
+</div>
+{% endif %}
+
+<!-- Footer with copyright and year -->
+<footer>
+    © CreatioExNihilo, 2024
+</footer>
+
+</body>
+</html>

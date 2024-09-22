@@ -125,4 +125,4 @@ def decrypt():
         return render_template('index.html', error=f"Failed to decrypt image: {e}")
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

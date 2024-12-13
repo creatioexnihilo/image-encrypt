@@ -54,7 +54,7 @@ python main.py
 
 ### How to Use:
 - **Encrypt Text**: Enter the text, provide a key, and click **Encrypt**.
-- **Decrypt Image**: Load the encrypted image, enter the key, and click **Decrypt** to extract the text.
+- **Decrypt Image**: Enter key then upload image and it will decrypt.
 ## 🛠️ Project Structure
 ```
 📁 image-encrypt/
